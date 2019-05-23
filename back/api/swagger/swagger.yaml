@@ -1,0 +1,186 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: Hello World App
+# during dev, should point to your local machine
+host: localhost:10010
+# basePath prefixes all resource paths 
+basePath: /
+# 
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+paths:
+  /hello:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: hello_world
+    get:
+      description: Returns 'Hello' to the caller
+      # used as the method name of the controller
+      operationId: hello
+      parameters:
+        - name: name
+          in: query
+          description: The name of the person to whom to say hello
+          required: false
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /messages:
+    x-swagger-router-controller: chat
+    get:
+      description: Get messages list
+      operationId: getMessages
+      responses:
+        200:
+          description: Success
+          schema:
+            type: string
+      parameters:
+        - name: l
+          in: query
+          description: Current messages count
+          required: true
+          type: integer
+        - name: token
+          in: query
+          description: User token
+          required: true
+          type: string
+    post:
+      description: Add message
+      operationId: addMessage
+      parameters:
+        - name: message
+          in: body
+          description: Message text
+          required: true
+          schema:
+            type: object
+            properties:
+              text:
+                type: string
+      responses:
+        200:
+          description: Success
+          schema:
+            type: string
+  /messages/photo:
+    x-swagger-router-controller: chat
+    post:
+      description: Upload photo
+      operationId: addPhoto
+      consumes:
+      - multipart/form-data
+      parameters:
+      - in: formData
+        name: photo
+        type: file
+        description: The file to upload.
+      - in: formData
+        name: token
+        type: string
+        description: User token
+      responses:
+        200:
+          description: Success
+          schema:
+            type: string
+  /uploads:
+    x-swagger-router-controller: chat
+    get:
+      description: Get file
+      operationId: getPhoto
+      parameters:
+      - name: name
+        in: query
+        description: File name
+        required: true
+        type: string 
+      responses:
+          200:
+            description: Success
+            schema:
+              type: string
+  /user:
+    x-swagger-router-controller: users
+    post:
+      description: Register user
+      parameters:
+        - name: user
+          in: body
+          description: User object
+          required: true
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+              password:
+                type: string
+      operationId: registerUser
+      responses:
+        200:
+          description: Success
+          schema:
+            type: string
+        404:
+          description: Not found
+  /user/login:
+    x-swagger-router-controller: users
+    post:
+        description: Register user
+        parameters:
+          - name: user
+            in: body
+            description: User object
+            required: true
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                password:
+                  type: string
+                key:
+                  type: string
+        operationId: loginUser  
+        responses:
+          200:
+            description: Success
+            schema:
+              type: string
+          404:
+            description: Not found
+  /swagger:
+    x-swagger-pipe: swagger_raw
+# complex objects have schema definitions
+definitions:
+  HelloWorldResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+  ErrorResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
