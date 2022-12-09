@@ -8,14 +8,14 @@
   "license": "",
   "main": "app.js",
   "dependencies": {
-    "express": "^4.12.3",
+    "express": "^4.18.2",
     "mongodb": "^3.2.3",
     "node-rsa": "^1.0.5",
     "swagger-express-mw": "^0.7.0"
   },
   "devDependencies": {
     "should": "^7.1.0",
-    "supertest": "^1.0.0"
+    "supertest": "^6.3.3"
   },
   "scripts": {
     "start": "node app.js",
