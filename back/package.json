@@ -8,7 +8,7 @@
   "license": "",
   "main": "app.js",
   "dependencies": {
-    "express": "^4.12.3",
+    "express": "^4.17.3",
     "mongodb": "^3.2.3",
     "node-rsa": "^1.0.5",
     "swagger-express-mw": "^0.7.0"
